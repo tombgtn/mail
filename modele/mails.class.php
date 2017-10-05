@@ -1,0 +1,30 @@
+<?php
+
+
+class mails {
+
+	/**
+	* Liste des mails
+	*
+	* @var mail
+	* @access private
+	*/ 
+	private $mails;
+
+	/**
+	* Timestamp de dernière actualisation
+	*
+	* @var timestamp
+	* @access private
+	*/ 
+	private $last_refresh;
+
+	/**
+	* Constructeur de la classe
+	*
+	* @param void
+	* @return void
+	*/
+	private function __construct() {
+	}
+}
