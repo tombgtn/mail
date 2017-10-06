@@ -1,1 +1,1 @@
-<?php require_once('main.php'); ?>
+You shall not pass!
