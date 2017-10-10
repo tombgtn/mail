@@ -4,6 +4,7 @@
 1 : BDD
 2 : Fichiers
 3 : Autorisations
+4 : Entrée utilisateur
 */
 
 100 : Erreur Base de données
@@ -23,3 +24,20 @@
 301 : Action non autorisé
 302 : Action nécessitant réapprobbation
 
+400 : Erreur formulaire
+401 : Champ non remplie
+402 : Champ de mauvais format
+403 : Mail incorrect
+404 : Mail bloqué
+405 : Nombre incorrect
+406 : Nombre interdit
+407 : Nombre trop grand
+408 : Nombre trop petit
+409 : Texte incorrect
+410 : Texte interdit
+411 : Texte trop long
+412 : Texte trop court
+413 : Date incorrect
+414 : Date interdite
+415 : Date trop récente
+416 : Date trop ancienne

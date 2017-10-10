@@ -1,7 +1,7 @@
 <?php
 
 
-class mail {
+class Mail {
 
 	/**
 	* Expéditeur du mail

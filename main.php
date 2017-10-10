@@ -118,12 +118,17 @@ class Constructor {
 	public static function loadModel($class) {
 		if (in_array($class, self::MODELS)) {
 			if (!@include_once('modele/'.$class.'.class.php')) {
-				throw new Exception ('Modèle non trouvé', 201);
+				throw new Exception('Modèle non trouvé', 201);
 			}
 		} else {
-			throw new Exception ('Modèle non accepté', 203);
+			throw new Exception('Modèle non accepté', 203);
 		}
 	}
+
+
+
+/**************************************************************************************************************************************************************************************************************************************   EN CONSTRUCTION   ***********************************************************************************************************************************************************************************************************************************************/
+
 
 	/**
 	* Méthode qui charge le template correspondant

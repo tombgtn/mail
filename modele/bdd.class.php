@@ -59,7 +59,7 @@ class BDD {
 		if ($mysqli->connect_errno) {
 			switch ($mysqli->connect_errno) {
 				case 9999: break;
-				default: throw new DatabaseException("Error connection", 1); break;
+				default: throw new Exception("Error connection", 1); break;
 			}
 		} else {
 			$this->BDD_Instance = $mysqli;

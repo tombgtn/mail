@@ -1,12 +1,12 @@
 <?php
 
 
-class mails {
+class Mails {
 
 	/**
 	* Liste des mails
 	*
-	* @var mail
+	* @var Mail
 	* @access private
 	*/ 
 	private $mails;
