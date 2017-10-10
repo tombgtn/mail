@@ -31,6 +31,24 @@ class Constructor {
 	* @var array
 	*/
 	const TEMPLATES = array('header', 'footer', 'liste', 'login', 'mail', 'menu', 'nouveau');
+ 
+	/**
+	* Constante: modeles possibles
+	*
+	* @var array
+	*/
+	const MODELS = array('bdd', 'mail', 'mails', 'user');
+ 
+	/**
+	* Constante: niveau de l'affichage des erreurs
+	* 0 : Affiche juste Erreur 500
+	* 1 : Affiche le domaine de l'erreur (Erreur BDD, Erreur Fichier,...)
+	* 2 : Affiche le status de l'erreur tel montré dans le fichier erreur.php
+	* 3 : Affiche le message d'erreur de l'exception
+	*
+	* @var int
+	*/
+	const ERROR_DISPLAY = 3;
 	
 	/**
 	* Slug de la page demandée
@@ -39,7 +57,7 @@ class Constructor {
 	* @access private
 	* @static
 	*/
-	private static $page = $this->whichPage();
+	private static $page;
 	
 	/**
 	* Slug du template de la page demandée
@@ -48,7 +66,19 @@ class Constructor {
 	* @access private
 	* @static
 	*/
-	private static $template = $this->whichTemplate();
+	private static $template;
+
+	/**
+	* Méthode qui crée l'unique instance de la classe
+	* si elle n'existe pas encore la créée puis la retourne.
+	*
+	* @param void
+	* @return Singleton
+	*/
+	public static function getInstance() {
+		if(is_null(self::$_instance)) { self::$_instance = new Constructor(); }
+		return self::$_instance;
+	}
 
 	/**
 	* Constructeur de la classe
@@ -58,22 +88,41 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
-			$this->doAction();
+			$this->init();
 		} catch (Exception $e) {
-
+			echo "Message : " . $e->getMessage();
+			echo "Code : " . $e->getCode();
 		}
 	}
 
 	/**
-	* Méthode qui crée l'unique instance de la classe
-	* si elle n'existe pas encore puis la retourne.
+	* Initialise la classe
+	*
+	* @param void
+	* @return void
+	*/
+	private function init() {
+		$this->loadModel('user');
+		// Initialise les variables pages, templates
+		$this->doAction();
+		// Affiche le template
+	}
+
+	/**
+	* Méthode qui charge un modele
+	*
 	*
 	* @param void
 	* @return Singleton
 	*/
-	public static function getInstance() {
-		if(is_null(self::$_instance)) { self::$_instance = new Constructor(); }
-		return self::$_instance;
+	public static function loadModel($class) {
+		if (in_array($class, self::MODELS)) {
+			if (!@include_once('modele/'.$class.'.class.php')) {
+				throw new Exception ('Modèle non trouvé', 201);
+			}
+		} else {
+			throw new Exception ('Modèle non accepté', 203);
+		}
 	}
 
 	/**
@@ -105,7 +154,7 @@ class Constructor {
 	* @param string $page Le slug de la page
 	* @return string Le slug du template
 	*/
-	public static function whichTemplate($page) {
+	public static function whichTemplate() {
 		// En fonction de la page et des paramètres $_GET ou $_POST... détermine quel template(s) doit être utilisé(s)
 	}
 
@@ -132,4 +181,5 @@ class Constructor {
 		// Envoie la réponse et le code
 	}
 }
+error_reporting(0);
 $constructor = Constructor::getInstance();

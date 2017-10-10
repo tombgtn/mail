@@ -56,8 +56,14 @@ class BDD {
 	*/
 	private function __construct() {
 		$mysqli = new mysqli(self::SQL_HOST, self::SQL_USER, self::SQL_PASS, self::SQL_DTB);
-		if (isset($mysqli->connect_error)) { throw new DatabaseException("Error connection", 1); }
-		else { $this->BDD_Instance = $mysqli; }
+		if ($mysqli->connect_errno) {
+			switch ($mysqli->connect_errno) {
+				case 9999: break;
+				default: throw new DatabaseException("Error connection", 1); break;
+			}
+		} else {
+			$this->BDD_Instance = $mysqli;
+		}
 	}
 
 	/**
