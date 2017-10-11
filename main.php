@@ -41,10 +41,9 @@ class Constructor {
 	private function __construct() {
 		try {
 			if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
-			if (!@include_once('.pages'))  { throw new Exception('Fichier de pages non trouvé', 201); }
 			$this->init();
 		} catch (Exception $e) {
-			echo "Message : " . $e->getMessage();
+			echo "Message : " . $e->getMessage().'<br/>';
 			echo "Code : " . $e->getCode();
 		}
 	}
@@ -56,9 +55,11 @@ class Constructor {
 	* @return void
 	*/
 	private function init() {
-		$this->page = whichPage(); // Determine quelle page est demandé
+		$this->correctPage();
 
-		$this->loadModel('user');  // Charge la classe User
+		$this->page = $this->whichPage(); // Determine quelle page est demandé
+
+		/*$this->loadModel('user');  // Charge la classe User
 		$needAuth = needAuth();    // Determine si la page est protégé
 		if (User::isLoggedIn()) {  // Si l'utilisateur est connecté
 		} else {                   // Si l'utilisateur n'est pas connecté
@@ -67,12 +68,52 @@ class Constructor {
 			} else {
 
 			}
-		}
+		}*/
 		
 		// Initialise les variables pages, templates
 		$this->doAction();
 		// Affiche le template
 	}
+
+	/**
+	* Méthode qui corrige l'url (slash de fin)
+	*
+	*
+	* @param void
+	* @return void
+	*/
+	public static function correctPage() {
+		$url = $_SERVER['REQUEST_URI'];
+		if (substr($url, -1)=='/') {
+			$new_url = substr($url, 0, -1);
+			header("Location: ".$new_url, true, 301);
+			exit;
+		}
+	}
+
+	/**
+	* Méthode qui dit dans quelle page nous sommes
+	*
+	*
+	* @param void
+	* @return string Le slug de la page
+	*/
+	public static function whichPage() {
+		$url = str_replace(BASE, '', $_SERVER['REQUEST_URI']);
+		var_dump($url);
+		/*$url = '/';
+		if ($key = array_search($url, array_column(PAGES, 'url'))) {
+			return $key;
+		} else {
+			throw new Exception('Cette page n\'existe pas', 204);
+		}*/
+	}
+
+
+
+/**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+
 
 	/**
 	* Méthode qui charge un modele
@@ -91,22 +132,6 @@ class Constructor {
 		}
 	}
 
-
-
-/**************************************************************************************************************************************************************************************************************************************   EN CONSTRUCTION   ***********************************************************************************************************************************************************************************************************************************************/
-
-
-	/**
-	* Méthode qui charge le template correspondant
-	*
-	*
-	* @param string $file Le slug du template
-	* @return html Le code html
-	*/
-	public static function getTemplate($file = 'login') {
-		// Récupère le template
-	}
-
 	/**
 	* Méthode qui dit si la page est protégé
 	*
@@ -123,22 +148,6 @@ class Constructor {
 	}
 
 	/**
-	* Méthode qui dit dans quelle page nous sommes
-	*
-	*
-	* @param void
-	* @return string Le slug de la page
-	*/
-	public static function whichPage() {
-		$url = '/';
-		if ($key = array_search($url, array_column(PAGES, 'url'));) {
-			return $key;
-		} else {
-			throw new Exception('Cette page n\'existe pas', 204);
-		}
-	}
-
-	/**
 	* Méthode qui dit quel template nous devons utiliser
 	*
 	*
@@ -147,6 +156,17 @@ class Constructor {
 	*/
 	public static function whichTemplate() {
 		// En fonction de la page et des paramètres $_GET ou $_POST... détermine quel template(s) doit être utilisé(s)
+	}
+
+	/**
+	* Méthode qui charge le template correspondant
+	*
+	*
+	* @param void
+	* @return html Le code html
+	*/
+	public static function getTemplate() {
+		// Récupère le template
 	}
 
 	/**
@@ -168,7 +188,7 @@ class Constructor {
 	* @param string $html Le code html de la page
 	* @return void
 	*/
-	public static function return($code, $html) {
+	public static function HTTPrequest($code, $html) {
 		// Envoie la réponse et le code
 	}
 }

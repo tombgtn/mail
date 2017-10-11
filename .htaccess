@@ -1,8 +1,8 @@
 <IfModule mod_rewrite.c>
 
 RewriteEngine On
-RewriteBase /
+RewriteBase /PERSO/MAIL/
 
-# RewriteRule
+RewriteRule .* main.php [L]
 
 </IfModule>
