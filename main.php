@@ -1,18 +1,4 @@
 <?php
-/*
-require_once('template/header.php');
-require_once('template/menu.php');
-require_once('template/liste.php');
-require_once('template/mail.php');
-require_once('template/footer.php');
-
-require_once('modele/bdd.class.php');
-require_once('modele/user.class.php');
-require_once('modele/mails.class.php');
-require_once('modele/mail.class.php');
-
-*/
-
 
 class Constructor {
 	
@@ -24,46 +10,7 @@ class Constructor {
 	* @static
 	*/
 	private static $_instance = null;
- 
-	/**
-	* Constante: templates possibles
-	*
-	* @var array
-	*/
-	const TEMPLATES = array('header', 'footer', 'liste', 'login', 'mail', 'menu', 'nouveau');
- 
-	/**
-	* Constante: modeles possibles
-	*
-	* @var array
-	*/
-	const MODELS = array('bdd', 'mail', 'mails', 'user');
- 
-	/**
-	* Constante: pages nécessitant d'être loggés
-	*
-	* @var array
-	*/
-	const LOG_NEED = array('logout', 'mails', 'mail', 'send', 'trash', 'new');
- 
-	/**
-	* Constante: pages nécessitant de ne pas être loggés
-	*
-	* @var array
-	*/
-	const UNLOG_NEED = array('login');
- 
-	/**
-	* Constante: niveau de l'affichage des erreurs
-	* 0 : Affiche juste Erreur 500
-	* 1 : Affiche le domaine de l'erreur (Erreur BDD, Erreur Fichier,...)
-	* 2 : Affiche le status de l'erreur tel montré dans le fichier erreur.php
-	* 3 : Affiche le message d'erreur de l'exception
-	*
-	* @var int
-	*/
-	const ERROR_DISPLAY = 3;
-	
+
 	/**
 	* Slug de la page demandée
 	* 
@@ -72,15 +19,6 @@ class Constructor {
 	* @static
 	*/
 	private static $page = null;
-	
-	/**
-	* Slug du template de la page demandée
-	* 
-	* @var string
-	* @access private
-	* @static
-	*/
-	private static $template = null;
 
 	/**
 	* Méthode qui crée l'unique instance de la classe
@@ -102,6 +40,8 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
+			if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
+			if (!@include_once('.pages'))  { throw new Exception('Fichier de pages non trouvé', 201); }
 			$this->init();
 		} catch (Exception $e) {
 			echo "Message : " . $e->getMessage();
@@ -228,4 +168,5 @@ class Constructor {
 	}
 }
 error_reporting(0);
+if (!defined('MASTER')) { define('MASTER', true); }
 $constructor = Constructor::getInstance();
