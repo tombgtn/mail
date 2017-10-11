@@ -40,11 +40,18 @@ class Constructor {
 	const MODELS = array('bdd', 'mail', 'mails', 'user');
  
 	/**
-	* Constante: pages privées
+	* Constante: pages nécessitant d'être loggés
 	*
 	* @var array
 	*/
-	const PRIVATES = array('logout', 'mails', 'mail', 'send', 'trash', 'new');
+	const LOG_NEED = array('logout', 'mails', 'mail', 'send', 'trash', 'new');
+ 
+	/**
+	* Constante: pages nécessitant de ne pas être loggés
+	*
+	* @var array
+	*/
+	const UNLOG_NEED = array('login');
  
 	/**
 	* Constante: niveau de l'affichage des erreurs
@@ -171,7 +178,7 @@ class Constructor {
 		if (isset($this->page)) {
 			return in_array($this->page, PRIVATES);
 		} else {
-			throw new Exception('Fonction needAuth() appelé avant whichPage()', 301);
+			throw new Exception('Constructor::page non définie', 301);
 		}
 	}
 
