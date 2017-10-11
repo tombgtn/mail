@@ -130,7 +130,12 @@ class Constructor {
 	* @return string Le slug de la page
 	*/
 	public static function whichPage() {
-		// En fonction de l'URL détermine quelle page est demandée
+		$url = '/';
+		if ($key = array_search($url, array_column(PAGES, 'url'));) {
+			return $key;
+		} else {
+			throw new Exception('Cette page n\'existe pas', 204);
+		}
 	}
 
 	/**
