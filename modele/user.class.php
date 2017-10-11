@@ -16,7 +16,7 @@ class User {
 	*
 	* @var string
 	* @access private
-	*/ 
+	*/
 	private $pass;
 
 	/**

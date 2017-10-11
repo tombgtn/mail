@@ -40,6 +40,13 @@ class Constructor {
 	const MODELS = array('bdd', 'mail', 'mails', 'user');
  
 	/**
+	* Constante: pages privées
+	*
+	* @var array
+	*/
+	const PRIVATES = array('logout', 'mails', 'mail', 'send', 'trash', 'new');
+ 
+	/**
 	* Constante: niveau de l'affichage des erreurs
 	* 0 : Affiche juste Erreur 500
 	* 1 : Affiche le domaine de l'erreur (Erreur BDD, Erreur Fichier,...)
@@ -57,7 +64,7 @@ class Constructor {
 	* @access private
 	* @static
 	*/
-	private static $page;
+	private static $page = null;
 	
 	/**
 	* Slug du template de la page demandée
@@ -66,7 +73,7 @@ class Constructor {
 	* @access private
 	* @static
 	*/
-	private static $template;
+	private static $template = null;
 
 	/**
 	* Méthode qui crée l'unique instance de la classe
@@ -102,7 +109,19 @@ class Constructor {
 	* @return void
 	*/
 	private function init() {
-		$this->loadModel('user');
+		$this->page = whichPage(); // Determine quelle page est demandé
+
+		$this->loadModel('user');  // Charge la classe User
+		$needAuth = needAuth();    // Determine si la page est protégé
+		if (User::isLoggedIn()) {  // Si l'utilisateur est connecté
+		} else {                   // Si l'utilisateur n'est pas connecté
+			if ($needAuth) {
+
+			} else {
+
+			}
+		}
+		
 		// Initialise les variables pages, templates
 		$this->doAction();
 		// Affiche le template
@@ -139,6 +158,21 @@ class Constructor {
 	*/
 	public static function getTemplate($file = 'login') {
 		// Récupère le template
+	}
+
+	/**
+	* Méthode qui dit si la page est protégé
+	*
+	*
+	* @param void
+	* @return booleen Protégé ou non
+	*/
+	public static function needAuth() {
+		if (isset($this->page)) {
+			return in_array($this->page, PRIVATES);
+		} else {
+			throw new Exception('Fonction needAuth() appelé avant whichPage()', 301);
+		}
 	}
 
 	/**
