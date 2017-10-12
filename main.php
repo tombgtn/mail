@@ -55,13 +55,22 @@ class Constructor {
 	* @return void
 	*/
 	private function init() {
+		/* Début de session */
+		//$sess_params = session_get_cookie_params();
+		//session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
+		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 501); }
+
+
 		$this->correctPage();
 
 		$this->page = $this->whichPage(); // Determine quelle page est demandé
 
-		/*$this->loadModel('user');  // Charge la classe User
-		$needAuth = needAuth();    // Determine si la page est protégé
-		if (User::isLoggedIn()) {  // Si l'utilisateur est connecté
+		$this->loadModel('user');  // Charge la classe User
+		$user = User::getInstance();
+		//$user->setCookie(); // Fixe le cookie
+
+		//$needAuth = needAuth();    // Determine si la page est protégé
+		/*if (User::isLoggedIn()) {  // Si l'utilisateur est connecté
 		} else {                   // Si l'utilisateur n'est pas connecté
 			if ($needAuth) {
 
@@ -83,8 +92,8 @@ class Constructor {
 	* @return void
 	*/
 	public static function correctPage() {
-		$url = $_SERVER['REQUEST_URI'];
-		if (substr($url, -1)=='/') {
+		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
+		if (substr($url, -1)=='/'&&$url!='/') {
 			$new_url = substr($url, 0, -1);
 			header("Location: ".$new_url, true, 301);
 			exit;
@@ -99,7 +108,7 @@ class Constructor {
 	* @return string Le slug de la page
 	*/
 	public static function whichPage() {
-		$url = str_replace(BASE, '', $_SERVER['REQUEST_URI']);
+		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
 		var_dump($url);
 		/*$url = '/';
 		if ($key = array_search($url, array_column(PAGES, 'url'))) {

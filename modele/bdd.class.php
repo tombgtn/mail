@@ -23,34 +23,6 @@ class BDD {
 	private $BDD_Instance = null;
 
 	/**
-	* Constante: nom d'utilisateur de la bdd
-	*
-	* @var string
-	*/
-	const SQL_USER = 'root';
- 
-	/**
-	* Constante: hôte de la bdd
-	*
-	* @var string
-	*/
-	const SQL_HOST = 'localhost';
- 
-	/**
-	* Constante: hôte de la bdd
-	*
-	* @var string
-	*/
-	const SQL_PASS = '';
- 
-	/**
-	* Constante: nom de la bdd
-	*
-	* @var string
-	*/
-	const SQL_DTB = 'database';
-
-	/**
 	* Constructeur de la classe
 	*
 	* @param void
