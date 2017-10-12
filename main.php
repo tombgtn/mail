@@ -58,8 +58,8 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
-			$this->setFunctions():
-			$this->setConfig():
+			$this->setFunctions();
+			$this->setConfig();
 			$this->init();
 		} catch (Exception $e) {
 			echo "Message : " . $e->getMessage().'<br/>';
@@ -112,8 +112,6 @@ class Constructor {
 		if (!defined('SALT_9')) { define('SALT_9', generate_salt()); }
 		if (!defined('SESS_DUREE')) { define('SESS_DUREE', 1296000); }
 		if (!defined('DEBUG')) { define('DEBUG', 0); }
-
-		return true;
 	}
 
 	/**
