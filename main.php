@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ERROR | E_CORE_ERROR);
+if (!defined('MASTER')) { define('MASTER', true); }
+
 class Constructor {
 
 
@@ -54,12 +57,9 @@ class Constructor {
 	* @return void
 	*/
 	private function __construct() {
-
-		error_reporting(0);
-		if (!defined('MASTER')) { define('MASTER', true); }
-
 		try {
-			if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
+			$this->setFunctions():
+			$this->setConfig():
 			$this->init();
 		} catch (Exception $e) {
 			echo "Message : " . $e->getMessage().'<br/>';
@@ -75,6 +75,46 @@ class Constructor {
 
 
 	/********** SCRIPT **********/
+
+	/**
+	* Charge la page des fonctions primaires (helpers)
+	*
+	* @param void
+	* @return void
+	*/
+	private function setFunctions() {
+		if (!@include_once('helpers.php')) { throw new Exception('Fichier de fonctions non trouvé', 201); }
+		return true;
+	}
+
+	/**
+	* Charge la config et verifie que tout est ok
+	*
+	* @param void
+	* @return void
+	*/
+	private function setConfig() {
+		if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
+		if (!defined('BASE')) { define('BASE', '/'); }
+		if (!defined('SQL_BASE')) { throw new Exception('La Constante SQL_BASE n\'existe pas', 504); }
+		if (!defined('SQL_USER')) { throw new Exception('La Constante SQL_USER n\'existe pas', 504); }
+		if (!defined('SQL_PASS')) { throw new Exception('La Constante SQL_PASS n\'existe pas', 504); }
+		if (!defined('SQL_HOST')) { throw new Exception('La Constante SQL_HOST n\'existe pas', 504); }
+		if (!defined('SQL_CHAR')) { define('SQL_CHAR', 'utf8'); }
+		if (!defined('SALT_1')) { define('SALT_1', generate_salt()); }
+		if (!defined('SALT_2')) { define('SALT_2', generate_salt()); }
+		if (!defined('SALT_3')) { define('SALT_3', generate_salt()); }
+		if (!defined('SALT_4')) { define('SALT_4', generate_salt()); }
+		if (!defined('SALT_5')) { define('SALT_5', generate_salt()); }
+		if (!defined('SALT_6')) { define('SALT_6', generate_salt()); }
+		if (!defined('SALT_7')) { define('SALT_7', generate_salt()); }
+		if (!defined('SALT_8')) { define('SALT_8', generate_salt()); }
+		if (!defined('SALT_9')) { define('SALT_9', generate_salt()); }
+		if (!defined('SESS_DUREE')) { define('SESS_DUREE', 1296000); }
+		if (!defined('DEBUG')) { define('DEBUG', 0); }
+
+		return true;
+	}
 
 	/**
 	* Initialise la classe
