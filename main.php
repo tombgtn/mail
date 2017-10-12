@@ -1,6 +1,12 @@
 <?php
 
 class Constructor {
+
+
+
+
+
+	/********** ATTRIBUTS **********/
 	
 	/**
 	* Instance de la class Constructor
@@ -19,6 +25,15 @@ class Constructor {
 	* @static
 	*/
 	private static $page = null;
+
+
+
+
+
+
+
+
+	/********** SINGLETON **********/
 
 	/**
 	* Méthode qui crée l'unique instance de la classe
@@ -39,6 +54,10 @@ class Constructor {
 	* @return void
 	*/
 	private function __construct() {
+
+		error_reporting(0);
+		if (!defined('MASTER')) { define('MASTER', true); }
+
 		try {
 			if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
 			$this->init();
@@ -48,6 +67,15 @@ class Constructor {
 		}
 	}
 
+
+
+
+
+
+
+
+	/********** SCRIPT **********/
+
 	/**
 	* Initialise la classe
 	*
@@ -55,15 +83,27 @@ class Constructor {
 	* @return void
 	*/
 	private function init() {
-		/* Début de session */
-		//$sess_params = session_get_cookie_params();
-		//session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
+
+		/* Détermine la page demandée */
+		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
+		var_dump($url);
+		$page = array_search($url, array_column(unserialize(PAGES), 'url'));
+		if (!$page) {
+			throw new Exception('Cette page n\'existe pas', 204);
+		}
+		$this->setPage($page);
+
+
+		/* Démarre la session */
+		$sess_params = session_get_cookie_params();
+		session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
 		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 501); }
 
 
-		$this->correctPage();
 
-		$this->page = $this->whichPage(); // Determine quelle page est demandé
+
+
+		/*$this->correctPage();
 
 		$this->loadModel('user');  // Charge la classe User
 		$user = User::getInstance();
@@ -77,12 +117,110 @@ class Constructor {
 			} else {
 
 			}
-		}*/
+		}*
 		
 		// Initialise les variables pages, templates
 		$this->doAction();
-		// Affiche le template
+		// Affiche le template*/
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
+	/********** GETTER **********/
+
+	/**
+	* Méthode qui récupère la page
+	*
+	*
+	* @param void
+	* @return string page
+	*/
+	public static function getPage() {
+		return $this->page;
+	}
+
+
+
+
+
+
+
+
+	/********** SETTER **********/
+
+	/**
+	* Méthode qui fixe la page
+	*
+	*
+	* @param string page
+	* @return void
+	*/
+	public function setPage($page) {
+		$this->page = $page;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	* Méthode qui corrige l'url (slash de fin)
@@ -98,24 +236,6 @@ class Constructor {
 			header("Location: ".$new_url, true, 301);
 			exit;
 		}
-	}
-
-	/**
-	* Méthode qui dit dans quelle page nous sommes
-	*
-	*
-	* @param void
-	* @return string Le slug de la page
-	*/
-	public static function whichPage() {
-		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
-		var_dump($url);
-		/*$url = '/';
-		if ($key = array_search($url, array_column(PAGES, 'url'))) {
-			return $key;
-		} else {
-			throw new Exception('Cette page n\'existe pas', 204);
-		}*/
 	}
 
 
@@ -200,7 +320,47 @@ class Constructor {
 	public static function HTTPrequest($code, $html) {
 		// Envoie la réponse et le code
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
-error_reporting(0);
-if (!defined('MASTER')) { define('MASTER', true); }
 $constructor = Constructor::getInstance();
