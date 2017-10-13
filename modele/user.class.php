@@ -4,6 +4,12 @@ if (!defined('MASTER')) { die('You shall not pass user !'); }
 
 
 class User {
+
+
+
+
+
+	/********** ATTRIBUTS **********/
 	
 	/**
 	* Instance de la class User
@@ -38,16 +44,14 @@ class User {
 	*/
 	private $pass;
 
-	/**
-	* Constructeur de la classe
-	*
-	* @param void
-	* @return void
-	*/
-	private function __construct() {
-		/**/
-		//if (session_status()!=PHP_SESSION_ACTIVE) { throw new Exception('La session n\'existe pas', 502); }
-	}
+
+
+
+
+
+
+
+	/********** SINGLETON **********/
 
 	/**
 	* Méthode qui crée l'unique instance de la classe
@@ -61,7 +65,56 @@ class User {
 		return self::$_instance;
 	}
 
-	/*********** SETTER ***********/
+	/**
+	* Constructeur de la classe
+	*
+	* @param void
+	* @return void
+	*/
+	private function __construct() {
+		/**/
+		//if (session_status()!=PHP_SESSION_ACTIVE) { throw new Exception('La session n\'existe pas', 502); }
+	}
+
+
+
+
+
+
+
+
+	/********** GETTER **********/
+
+	/**
+	* Méthode qui renvoie le mail de l'utilisateur
+	*
+	* @param void
+	* @return string
+	*/
+	public function getMail() {
+		return $this->mail;
+	}
+
+	/**
+	* Méthode qui dit si le mot de passe est le même ou non
+	*
+	* @param string mot de passe à vérifier
+	* @return booleen
+	*/
+	public function verifyPass($pass) {
+		$salt = intval(substr($this->pass, -1));
+		if (!isset($salt)||!is_int($salt)||$salt>9||$salt<1||in_array($salt, array(1,2,3,4,5,6,7,8,9))) { throw new Exception('Le mot de passe n\'est pas correctement crypté', 505); }
+		return $this->pass===hash_password($pass, $salt);
+	}
+
+
+
+
+
+
+
+
+	/********** SETTER **********/
 
 	/**
 	* Méthode qui crée le cookie d'enregistrement
@@ -99,15 +152,13 @@ class User {
 		}
 	}
 
-	/*********** GETTER ***********/
-
 	/**
-	* Méthode qui renvoie le mail de l'utilisateur
+	* Méthode qui fixe le mot de passe de l'utilisateur
 	*
-	* @param void
-	* @return string
+	* @param string
+	* @return void
 	*/
-	public function getMail() {
-		return $this->mail;
+	public function setPassword($pass) {
+		$this->pass = hash_password($pass);
 	}
 }

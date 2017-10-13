@@ -124,12 +124,22 @@ class Constructor {
 
 		/* Détermine la page demandée */
 		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
-		var_dump($url);
-		$page = array_search($url, array_column(unserialize(PAGES), 'url'));
+		$page = array_search($url, array_column(PAGES, 'url'));
 		if (!$page) {
-			throw new Exception('Cette page n\'existe pas', 204);
+			/* Si la page demandée n'existe pas, cherche une alternative (avec ou sans slash) */
+			$alt_url = alternative_url($url);
+			$alt_page = array_search($alt_url, array_column(PAGES, 'url'));
+			if (!$alt_page) {
+				/* Si l'alternative n'existe pas : 404 */
+				throw new Exception('Cette page n\'existe pas', 204);
+			} else {
+				/* Si l'alternative existe : redirection */
+				redirect($alt_url, 301);
+			}
 		}
 		$this->setPage($page);
+		var_dump($url);
+		var_dump($page);
 
 
 		/* Démarre la session */
@@ -138,33 +148,19 @@ class Constructor {
 		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 501); }
 
 
-
-
-
-		/*$this->correctPage();
-
-		$this->loadModel('user');  // Charge la classe User
-		$user = User::getInstance();
-		//$user->setCookie(); // Fixe le cookie
-
-		//$needAuth = needAuth();    // Determine si la page est protégé
-		/*if (User::isLoggedIn()) {  // Si l'utilisateur est connecté
-		} else {                   // Si l'utilisateur n'est pas connecté
-			if ($needAuth) {
-
-			} else {
-
+		/* Execute les actions de la page */
+		if (isset(PAGES[$page]['action'])) {
+			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
+				PAGES[$page]['action']();
+			} else if (is_array(PAGES[$page]['action'])) {
+				/*
+				load model
+				*/
 			}
-		}*
+		}
 		
-		// Initialise les variables pages, templates
-		$this->doAction();
-		// Affiche le template*/
 
-
-
-
-
+		/* Affiche les templates de la page */
 	}
 
 
@@ -259,22 +255,6 @@ class Constructor {
 
 
 
-
-	/**
-	* Méthode qui corrige l'url (slash de fin)
-	*
-	*
-	* @param void
-	* @return void
-	*/
-	public static function correctPage() {
-		$url = str_replace(BASE, '/', $_SERVER['REQUEST_URI']);
-		if (substr($url, -1)=='/'&&$url!='/') {
-			$new_url = substr($url, 0, -1);
-			header("Location: ".$new_url, true, 301);
-			exit;
-		}
-	}
 
 
 
