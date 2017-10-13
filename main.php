@@ -125,12 +125,12 @@ class Constructor {
 		/* Détermine la page demandée */
 		$full_url = $_SERVER['REQUEST_URI'];
 		$url = str_replace(BASE, '/', $full_url);
-		$page = array_search($url, array_column(PAGES, 'url'));
+		$page = array_search_key(PAGES, 'url', $url);
 		if (!$page) {
 			/* Si la page demandée n'existe pas, cherche une alternative (avec ou sans slash) */
 			$alt_full_url = alternative_url($full_url);
 			$alt_url = str_replace(BASE, '/', $alt_full_url);
-			$alt_page = array_search($alt_url, array_column(PAGES, 'url'));
+			$alt_page = array_search_key(PAGES, 'url', $alt_url);
 			if (!$alt_page) {
 				/* Si l'alternative n'existe pas : 404 */
 				throw new Exception('Cette page n\'existe pas', 204);
@@ -142,8 +142,6 @@ class Constructor {
 		$this->setPage($page);
 		var_dump($url);
 		var_dump($page);
-		var_dump(array_column(PAGES, 'url'));
-		var_dump(array_search($url, array_column(PAGES, 'url')));
 
 
 		/* Démarre la session */

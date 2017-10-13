@@ -22,3 +22,5 @@ function alternative_url($url) {
 	if (substr($url, -1)=='/'&&$url!='/') { return substr($url, 0, -1); } // Enlève le slash
 	if (substr($url, -1)!='/')            { return $url.'/'; } // Ajoute le slash
 }
+
+function array_search_key($a, $k, $s) { return array_search($s,array_filter(array_combine(array_keys($a),array_column($a, $k)))); }
