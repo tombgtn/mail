@@ -15,7 +15,7 @@ function generate_salt() {
 
 function redirect($url, $code=302) {
 	if (!in_array($code, array(301,302))) { $code = 302; }
-	header("Location: ".$new_url, true, $code);
+	header("Location: ".$url, true, $code);
 }
 
 function alternative_url($url) {
