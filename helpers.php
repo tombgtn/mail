@@ -24,3 +24,14 @@ function alternative_url($url) {
 }
 
 function array_search_key($a, $k, $s) { return array_search($s,array_filter(array_combine(array_keys($a),array_column($a, $k)))); }
+
+function template_exist($template) {
+	if (is_string($template)) {
+		/* Determine si le template existe dans le dossier templates */
+		return true;
+	} else if (is_array($template)) {
+		/* Determine si les templates existent dans le dossier templates */
+		return true;
+	}
+	return false;
+}

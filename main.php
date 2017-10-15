@@ -29,6 +29,15 @@ class Constructor {
 	*/
 	private static $page = null;
 
+	/**
+	* Liste des templates demandée
+	* 
+	* @var array
+	* @access private
+	* @static
+	*/
+	private static $templates = null;
+
 
 
 
@@ -140,8 +149,6 @@ class Constructor {
 			}
 		}
 		$this->setPage($page);
-		var_dump($url);
-		var_dump($page);
 
 
 		/* Démarre la session */
@@ -150,19 +157,31 @@ class Constructor {
 		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 501); }
 
 
+		/* Enregistre le template par défaut */
+		if (isset(PAGES[$page]['templates'])) {
+			$this->setTemplate(PAGES[$page]['templates']);
+		}
+
+		echo 'URL : '.$url.'<br/>';
+		echo 'This:page : '.$this->page.'<br/>';
+		echo 'This:templates : '.implode(', ', $this->templates);
+		
+
 		/* Execute les actions de la page */
 		if (isset(PAGES[$page]['action'])) {
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
-				PAGES[$page]['action']();
+				//PAGES[$page]['action']();
 			} else if (is_array(PAGES[$page]['action'])) {
 				/*
 				load model
+				execute model::fucntion
 				*/
 			}
 		}
 		
 
-		/* Affiche les templates de la page */
+		/* Affiche les templates enregistrés */
+		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
 	}
 
 
@@ -203,6 +222,22 @@ class Constructor {
 	*/
 	public function setPage($page) {
 		$this->page = $page;
+	}
+
+	/**
+	* Méthode qui fixe le template
+	*
+	*
+	* @param string template
+	* @return void
+	*/
+	public function setTemplate($templates) {
+		if (template_exist($templates)) {
+			if (is_string($templates)) { $templates = array($templates); }
+			$this->templates = $templates;
+		} else {
+			throw new Exception('Un ou plusieurs templates n\'existe pas', 206);	
+		}
 	}
 
 
@@ -282,32 +317,6 @@ class Constructor {
 	}
 
 	/**
-	* Méthode qui dit si la page est protégé
-	*
-	*
-	* @param void
-	* @return booleen Protégé ou non
-	*/
-	public static function needAuth() {
-		if (isset($this->page)) {
-			return in_array($this->page, PRIVATES);
-		} else {
-			throw new Exception('Constructor::page non définie', 301);
-		}
-	}
-
-	/**
-	* Méthode qui dit quel template nous devons utiliser
-	*
-	*
-	* @param string $page Le slug de la page
-	* @return string Le slug du template
-	*/
-	public static function whichTemplate() {
-		// En fonction de la page et des paramètres $_GET ou $_POST... détermine quel template(s) doit être utilisé(s)
-	}
-
-	/**
 	* Méthode qui charge le template correspondant
 	*
 	*
@@ -316,18 +325,6 @@ class Constructor {
 	*/
 	public static function getTemplate() {
 		// Récupère le template
-	}
-
-	/**
-	* Méthode qui execute le modèle correspondant
-	*
-	*
-	* @param void
-	* @return void
-	*/
-	public static function doAction() {
-		// En fonction de la page demandé et des autorisations (loggé ou non) charge les différentes classes et effectue les modifications
-		// Si erreur, throw new Exception
 	}
 
 	/**
@@ -383,4 +380,4 @@ class Constructor {
 
 
 }
-$constructor = Constructor::getInstance();
+$main = Constructor::getInstance();
