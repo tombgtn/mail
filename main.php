@@ -67,6 +67,7 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
+			$this->setErrors();
 			$this->setFunctions();
 			$this->setConfig();
 			$this->init();
@@ -86,13 +87,24 @@ class Constructor {
 	/********** SCRIPT **********/
 
 	/**
-	* Charge la page des fonctions primaires (helpers)
+	* Charge la page des erreurs (errors.php)
+	*
+	* @param void
+	* @return void
+	*/
+	private function setErrors() {
+		if (!@include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur non trouvé', 201); }
+		return true;
+	}
+
+	/**
+	* Charge la page des fonctions primaires (functions.php)
 	*
 	* @param void
 	* @return void
 	*/
 	private function setFunctions() {
-		if (!@include_once('helpers.php')) { throw new Exception('Fichier de fonctions non trouvé', 201); }
+		if (!@include_once(BASE.'core/functions.php')) { throw new Exception('Fichier de fonctions non trouvé', 201); }
 		return true;
 	}
 
@@ -181,6 +193,11 @@ class Constructor {
 		
 
 		/* Affiche les templates enregistrés */
+		if (isset($this->templates)) {
+			# code...
+		} else {
+			throw new Exception('La session n\'a pas pu démarré', 501);
+		}
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
 	}
 
