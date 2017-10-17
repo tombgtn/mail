@@ -93,7 +93,7 @@ class Constructor {
 	* @return void
 	*/
 	private function setErrors() {
-		if (!@include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur non trouvé', 201); }
+		if (!@include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
 		return true;
 	}
 
@@ -104,7 +104,7 @@ class Constructor {
 	* @return void
 	*/
 	private function setFunctions() {
-		if (!@include_once(BASE.'core/functions.php')) { throw new Exception('Fichier de fonctions non trouvé', 201); }
+		if (!@include_once(BASE.'core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); }
 		return true;
 	}
 
@@ -115,12 +115,12 @@ class Constructor {
 	* @return void
 	*/
 	private function setConfig() {
-		if (!@include_once('.config')) { throw new Exception('Fichier de configuration non trouvé', 201); }
+		if (!@include_once('.config')) { throw new Exception('Fichier de configuration manquant', 131); }
 		if (!defined('BASE')) { define('BASE', '/'); }
-		if (!defined('SQL_BASE')) { throw new Exception('La Constante SQL_BASE n\'existe pas', 504); }
-		if (!defined('SQL_USER')) { throw new Exception('La Constante SQL_USER n\'existe pas', 504); }
-		if (!defined('SQL_PASS')) { throw new Exception('La Constante SQL_PASS n\'existe pas', 504); }
-		if (!defined('SQL_HOST')) { throw new Exception('La Constante SQL_HOST n\'existe pas', 504); }
+		if (!defined('SQL_BASE')) { throw new Exception('La Constante SQL_BASE n\'existe pas', 158); }
+		if (!defined('SQL_USER')) { throw new Exception('La Constante SQL_USER n\'existe pas', 154); }
+		if (!defined('SQL_PASS')) { throw new Exception('La Constante SQL_PASS n\'existe pas', 156); }
+		if (!defined('SQL_HOST')) { throw new Exception('La Constante SQL_HOST n\'existe pas', 152); }
 		if (!defined('SQL_CHAR')) { define('SQL_CHAR', 'utf8'); }
 		if (!defined('SALT_1')) { define('SALT_1', generate_salt()); }
 		if (!defined('SALT_2')) { define('SALT_2', generate_salt()); }
@@ -152,13 +152,8 @@ class Constructor {
 			$alt_full_url = alternative_url($full_url);
 			$alt_url = str_replace(BASE, '/', $alt_full_url);
 			$alt_page = array_search_key(PAGES, 'url', $alt_url);
-			if (!$alt_page) {
-				/* Si l'alternative n'existe pas : 404 */
-				throw new Exception('Cette page n\'existe pas', 204);
-			} else {
-				/* Si l'alternative existe : redirection */
-				redirect($alt_full_url, 301);
-			}
+			if (!$alt_page) { throw new Exception('Cette page n\'existe pas', 210); /* Si l'alternative n'existe pas : 404 */ }
+			else { redirect($alt_full_url, 301); /* Si l'alternative existe : redirection */ }
 		}
 		$this->setPage($page);
 
@@ -166,17 +161,11 @@ class Constructor {
 		/* Démarre la session */
 		$sess_params = session_get_cookie_params();
 		session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
-		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 501); }
+		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 172); }
 
 
 		/* Enregistre le template par défaut */
-		if (isset(PAGES[$page]['templates'])) {
-			$this->setTemplate(PAGES[$page]['templates']);
-		}
-
-		echo 'URL : '.$url.'<br/>';
-		echo 'This:page : '.$this->page.'<br/>';
-		echo 'This:templates : '.implode(', ', $this->templates);
+		if (isset(PAGES[$page]['templates'])) { $this->setTemplate(PAGES[$page]['templates']); }
 		
 
 		/* Execute les actions de la page */
@@ -193,12 +182,16 @@ class Constructor {
 		
 
 		/* Affiche les templates enregistrés */
-		if (isset($this->templates)) {
-			# code...
-		} else {
-			throw new Exception('La session n\'a pas pu démarré', 501);
-		}
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
+		if (isset($this->templates)) {
+			
+		} else {
+			throw new Exception('Aucun template(s) définie(-nt)', 141);
+		}
+
+		echo 'URL : '.$url.'<br/>';
+		echo 'This:page : '.$this->page.'<br/>';
+		echo 'This:templates : '.implode(', ', $this->templates);
 	}
 
 
@@ -219,6 +212,17 @@ class Constructor {
 	*/
 	public static function getPage() {
 		return $this->page;
+	}
+
+	/**
+	* Méthode qui récupère les templates
+	*
+	*
+	* @param void
+	* @return string page
+	*/
+	public static function getTemplate() {
+		return $this->templates;
 	}
 
 
@@ -253,7 +257,7 @@ class Constructor {
 			if (is_string($templates)) { $templates = array($templates); }
 			$this->templates = $templates;
 		} else {
-			throw new Exception('Un ou plusieurs templates n\'existe pas', 206);	
+			throw new Exception('Un ou plusieurs templates n\'existe pas', 142);	
 		}
 	}
 
@@ -326,10 +330,10 @@ class Constructor {
 	public static function loadModel($class) {
 		if (in_array($class, self::MODELS)) {
 			if (!@include_once('modele/'.$class.'.class.php')) {
-				throw new Exception('Modèle non trouvé', 201);
+				throw new Exception('Modèle non trouvé', 132);
 			}
 		} else {
-			throw new Exception('Modèle non accepté', 203);
+			throw new Exception('Modèle non accepté', 134);
 		}
 	}
 
