@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ERROR | E_CORE_ERROR);
+//error_reporting(E_ERROR | E_CORE_ERROR);
 if (!defined('MASTER')) { define('MASTER', true); }
 
 class Constructor {
@@ -67,8 +67,6 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
-			$this->setErrors();
-			$this->setFunctions();
 			$this->setConfig();
 			$this->init();
 		} catch (Exception $e) {
@@ -92,8 +90,8 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setErrors() {
-		if (!@include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
+	private function setErrors() {var_dump(BASE.'core/errors.php');
+		if (!include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
 		return true;
 	}
 
@@ -116,7 +114,18 @@ class Constructor {
 	*/
 	private function setConfig() {
 		if (!@include_once('.config')) { throw new Exception('Fichier de configuration manquant', 131); }
-		if (!defined('BASE')) { define('BASE', '/'); }
+		if (!defined('BASE')) { define('BASE', dirname(__FILE__)); }
+		set_include_path(BASE);
+		var_dump(dirname('/'));
+		var_dump(dirname('/PERSO/MAIL/'));
+		var_dump(dirname(__FILE__));
+		var_dump(__DIR__);
+		var_dump(realpath(__FILE__));
+		var_dump(realpath(dirname(__FILE__)));
+
+		$this->setErrors();
+		$this->setFunctions();
+
 		if (!defined('SQL_BASE')) { throw new Exception('La Constante SQL_BASE n\'existe pas', 158); }
 		if (!defined('SQL_USER')) { throw new Exception('La Constante SQL_USER n\'existe pas', 154); }
 		if (!defined('SQL_PASS')) { throw new Exception('La Constante SQL_PASS n\'existe pas', 156); }
@@ -344,7 +353,7 @@ class Constructor {
 	* @param void
 	* @return html Le code html
 	*/
-	public static function getTemplate() {
+	public static function loadTemplate() {
 		// Récupère le template
 	}
 
