@@ -90,8 +90,8 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setErrors() {var_dump(BASE.'core/errors.php');
-		if (!include_once(BASE.'core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
+	private function setErrors() {
+		if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
 		return true;
 	}
 
@@ -102,7 +102,7 @@ class Constructor {
 	* @return void
 	*/
 	private function setFunctions() {
-		if (!@include_once(BASE.'core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); }
+		if (!@include_once('./core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); }
 		return true;
 	}
 
@@ -114,14 +114,8 @@ class Constructor {
 	*/
 	private function setConfig() {
 		if (!@include_once('.config')) { throw new Exception('Fichier de configuration manquant', 131); }
-		if (!defined('BASE')) { define('BASE', dirname(__FILE__)); }
+		if (!defined('BASE')) { define('BASE', '/'); }
 		set_include_path(BASE);
-		var_dump(dirname('/'));
-		var_dump(dirname('/PERSO/MAIL/'));
-		var_dump(dirname(__FILE__));
-		var_dump(__DIR__);
-		var_dump(realpath(__FILE__));
-		var_dump(realpath(dirname(__FILE__)));
 
 		$this->setErrors();
 		$this->setFunctions();
