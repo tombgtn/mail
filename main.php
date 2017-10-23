@@ -67,7 +67,14 @@ class Constructor {
 	*/
 	private function __construct() {
 		try {
+			$this->setErrors();
 			$this->setConfig();
+		} catch (Exception $e) { // Impossibilité  de personnaliser le niveau d'erreur
+			echo "Message : Fichier d'erreur et niveau de debug manquant : Impossibilité d'afficher les erreurs<br/>";
+		}
+
+		try {
+			$this->checkConfig();
 			$this->init();
 		} catch (Exception $e) {
 			echo "Message : " . $e->getMessage().'<br/>';
@@ -107,18 +114,25 @@ class Constructor {
 	}
 
 	/**
-	* Charge la config et verifie que tout est ok
+	* Charge la config et et le niveau d'erreur
 	*
 	* @param void
 	* @return void
 	*/
 	private function setConfig() {
 		if (!@include_once('.config')) { throw new Exception('Fichier de configuration manquant', 131); }
+		if (!defined('DEBUG')||in_array(DEBUG, array(0,1,2,3))) { define('DEBUG', 0); }
+	}
+
+	/**
+	* Verifie que la config est bonne
+	*
+	* @param void
+	* @return void
+	*/
+	private function checkConfig() {
 		if (!defined('BASE')) { define('BASE', '/'); }
 		set_include_path(BASE);
-
-		$this->setErrors();
-		$this->setFunctions();
 
 		if (!defined('SQL_BASE')) { throw new Exception('La Constante SQL_BASE n\'existe pas', 158); }
 		if (!defined('SQL_USER')) { throw new Exception('La Constante SQL_USER n\'existe pas', 154); }
@@ -135,7 +149,8 @@ class Constructor {
 		if (!defined('SALT_8')) { define('SALT_8', generate_salt()); }
 		if (!defined('SALT_9')) { define('SALT_9', generate_salt()); }
 		if (!defined('SESS_DUREE')) { define('SESS_DUREE', 1296000); }
-		if (!defined('DEBUG')) { define('DEBUG', 0); }
+
+		$this->setFunctions();
 	}
 
 	/**
