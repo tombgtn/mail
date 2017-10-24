@@ -74,7 +74,6 @@ class Constructor {
 		}
 
 		try {
-			$this->checkConfig();
 			$this->init();
 		} catch (Exception $e) {
 			echo "Message : " . $e->getMessage().'<br/>';
@@ -97,10 +96,7 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setErrors() {
-		if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); }
-		return true;
-	}
+	private function setErrors() { if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); } }
 
 	/**
 	* Charge la page des fonctions primaires (functions.php)
@@ -108,10 +104,7 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setFunctions() {
-		if (!@include_once('./core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); }
-		return true;
-	}
+	private function setFunctions() { if (!@include_once('./core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); } }
 
 	/**
 	* Charge la config et et le niveau d'erreur
@@ -149,8 +142,6 @@ class Constructor {
 		if (!defined('SALT_8')) { define('SALT_8', generate_salt()); }
 		if (!defined('SALT_9')) { define('SALT_9', generate_salt()); }
 		if (!defined('SESS_DUREE')) { define('SESS_DUREE', 1296000); }
-
-		$this->setFunctions();
 	}
 
 	/**
@@ -161,12 +152,38 @@ class Constructor {
 	*/
 	private function init() {
 
+		/* Charge les fonctions et la config obligatoire */
+		$this->setFunctions();
+		$this->checkConfig();
+
 		/* Détermine la page demandée */
+		$page = $this->whichPage();
+		$this->setPage($page);
+
+		/* Enregistre le template par défaut */
+		if (isset(PAGES[$page]['templates'])) { $this->setTemplate(PAGES[$page]['templates']); }
+		
+		/* Execute les actions de la page */
+		$this->doAction();
+		
+		/* Charge les templates enregistrés */
+		$html = $this->loadTemplate();
+		
+		/* Envoie la réponse */
+		$this->sendRequest($html);
+		
+	}
+
+	/**
+	* Méthode qui dis sur quelle page on est
+	*
+	*
+	* @param void
+	* @return le code de la page
+	*/
+	public static function whichPage() {
 		$full_url = $_SERVER['REQUEST_URI'];
 		$url = str_replace(BASE, '/', $full_url);
-		if ($url==='/ajax') {
-			# code...
-		}
 		$page = array_search_key(PAGES, 'url', $url);
 		if (!$page) {
 			/* Si la page demandée n'existe pas, cherche une alternative (avec ou sans slash) */
@@ -176,20 +193,16 @@ class Constructor {
 			if (!$alt_page) { throw new Exception('Cette page n\'existe pas', 210); /* Si l'alternative n'existe pas : 404 */ }
 			else { redirect($alt_full_url, 301); /* Si l'alternative existe : redirection */ }
 		}
-		$this->setPage($page);
+	}
 
-
-		/* Démarre la session */
-		$sess_params = session_get_cookie_params();
-		session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
-		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 172); }
-
-
-		/* Enregistre le template par défaut */
-		if (isset(PAGES[$page]['templates'])) { $this->setTemplate(PAGES[$page]['templates']); }
-		
-
-		/* Execute les actions de la page */
+	/**
+	* Méthode qui execute les actions de la page demandée
+	*
+	*
+	* @param void
+	* @return resultat de l'action
+	*/
+	public static function doAction() {
 		if (isset(PAGES[$page]['action'])) {
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
 				//PAGES[$page]['action']();
@@ -200,19 +213,33 @@ class Constructor {
 				*/
 			}
 		}
-		
+	}
 
-		/* Affiche les templates enregistrés */
+	/**
+	* Méthode qui charge le code html
+	*
+	*
+	* @param void
+	* @return string code html du template
+	*/
+	public static function loadTemplate() {
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
-		if (isset($this->templates)) {
+		if (isset($this->getTemplate())) {
 			
 		} else {
 			throw new Exception('Aucun template(s) définie(-nt)', 141);
 		}
+	}
 
-		echo 'URL : '.$url.'<br/>';
-		echo 'This:page : '.$this->page.'<br/>';
-		echo 'This:templates : '.implode(', ', $this->templates);
+	/**
+	* Méthode qui renvoie la requete avec html et metas
+	*
+	*
+	* @param void
+	* @return string code html du template
+	*/
+	public static function sendRequest($html, $code) {
+		
 	}
 
 
@@ -339,6 +366,11 @@ class Constructor {
 
 /**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+
+		/* Démarre la session 
+		$sess_params = session_get_cookie_params();
+		session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
+		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 172); }*/
 
 
 	/**
