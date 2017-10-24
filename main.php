@@ -164,6 +164,9 @@ class Constructor {
 		/* Détermine la page demandée */
 		$full_url = $_SERVER['REQUEST_URI'];
 		$url = str_replace(BASE, '/', $full_url);
+		if ($url==='/ajax') {
+			# code...
+		}
 		$page = array_search_key(PAGES, 'url', $url);
 		if (!$page) {
 			/* Si la page demandée n'existe pas, cherche une alternative (avec ou sans slash) */
