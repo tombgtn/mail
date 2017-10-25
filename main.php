@@ -1,8 +1,5 @@
 <?php
 
-//error_reporting(E_ERROR | E_CORE_ERROR);
-if (!defined('MASTER')) { define('MASTER', true); }
-
 class Constructor {
 
 
@@ -94,9 +91,11 @@ class Constructor {
 	* @return void
 	*/
 	private function __construct() {
+		error_reporting(E_ERROR | E_CORE_ERROR);
+		if (!defined('MASTER')) { define('MASTER', true); }
+
 		try {
 			$this->setErrors();
-			$this->setDebug();
 		} catch (Exception $e) { // Impossibilité  de personnaliser le niveau d'erreur
 			echo "Message : Fichier d'erreur et niveau de debug manquant : Impossibilité d'afficher les erreurs<br/>";
 		}
@@ -119,12 +118,27 @@ class Constructor {
 	/********** SCRIPT **********/
 
 	/**
+	* Initialise la classe (programme principal)
+	*
+	* @param void
+	* @return void
+	*/
+	private function init() {
+		$this->setConfig();        /* Charge les fonctions et la config minimum */
+		$this->whichPage();        /* Détermine la page demandée */
+		$this->defaultTemplate();  /* Enregistre le template par défaut */
+		$this->doAction();         /* Execute les actions de la page */
+		$this->loadTemplate();     /* Charge les templates enregistrés */
+		$this->sendRequest();      /* Envoie la réponse */
+	}
+
+	/**
 	* Charge la page des erreurs (errors.php)
 	*
 	* @param void
 	* @return void
 	*/
-	private function setErrors() { if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); } }
+	private function setErrors() { if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); } $this->setDebug(); }
 
 	/**
 	* Charge la page des fonctions primaires (functions.php)
@@ -172,21 +186,6 @@ class Constructor {
 		if (!defined('SALT_8')) { define('SALT_8', generate_salt()); }
 		if (!defined('SALT_9')) { define('SALT_9', generate_salt()); }
 		if (!defined('SESS_DUREE')) { define('SESS_DUREE', 1296000); }
-	}
-
-	/**
-	* Initialise la classe
-	*
-	* @param void
-	* @return void
-	*/
-	private function init() {
-		$this->setConfig();        /* Charge les fonctions et la config obligatoire */
-		$this->whichPage();        /* Détermine la page demandée */
-		$this->defaultTemplate();  /* Enregistre le template par défaut */
-		$this->doAction();         /* Execute les actions de la page */
-		$this->loadTemplate();     /* Charge les templates enregistrés */
-		$this->sendRequest($html); /* Envoie la réponse */
 	}
 
 	/**
@@ -350,150 +349,6 @@ class Constructor {
 			throw new Exception('Le code HTTP n\'existe pas', 181);	
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-
-
-		/* Démarre la session 
-		$sess_params = session_get_cookie_params();
-		session_set_cookie_params($sess_params["lifetime"], BASE, $sess_params["domain"], true, true);
-		if (!session_start()) { throw new Exception('La session n\'a pas pu démarré', 172); }*/
-
-
-	/**
-	* Méthode qui charge un modele
-	*
-	*
-	* @param void
-	* @return Singleton
-	*/
-	public static function loadModel($class) {
-		if (in_array($class, self::MODELS)) {
-			if (!@include_once('modele/'.$class.'.class.php')) {
-				throw new Exception('Modèle non trouvé', 132);
-			}
-		} else {
-			throw new Exception('Modèle non accepté', 134);
-		}
-	}
-
-	/**
-	* Méthode qui charge le template correspondant
-	*
-	*
-	* @param void
-	* @return html Le code html
-	*/
-	public static function loadTemplate() {
-		// Récupère le template
-	}
-
-	/**
-	* Méthode qui affiche le code html
-	*
-	* @param int $code Le code HTTP
-	* @param string $html Le code html de la page
-	* @return void
-	*/
-	public static function HTTPrequest($code, $html) {
-		// Envoie la réponse et le code
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 $main = Constructor::getInstance();
