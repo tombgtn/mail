@@ -38,6 +38,34 @@ class Constructor {
 	*/
 	private static $templates = null;
 
+	/**
+	* Code de retour
+	* 
+	* @link https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP
+	* @var int
+	* @access private
+	* @static
+	*/
+	private static $code = null;
+
+	/**
+	* Data générée par les actions
+	* 
+	* @var array/string/object/...
+	* @access private
+	* @static
+	*/
+	private static $data = null;
+
+	/**
+	* Html généré par le template
+	* 
+	* @var string
+	* @access private
+	* @static
+	*/
+	private static $html = '';
+
 
 
 
@@ -68,7 +96,7 @@ class Constructor {
 	private function __construct() {
 		try {
 			$this->setErrors();
-			$this->setConfig();
+			$this->setDebug();
 		} catch (Exception $e) { // Impossibilité  de personnaliser le niveau d'erreur
 			echo "Message : Fichier d'erreur et niveau de debug manquant : Impossibilité d'afficher les erreurs<br/>";
 		}
@@ -112,7 +140,7 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setConfig() {
+	private function setDebug() {
 		if (!@include_once('.config')) { throw new Exception('Fichier de configuration manquant', 131); }
 		if (!defined('DEBUG')||in_array(DEBUG, array(0,1,2,3))) { define('DEBUG', 0); }
 	}
@@ -123,7 +151,9 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function checkConfig() {
+	private function setConfig() {
+		$this->setFunctions();
+		
 		if (!defined('BASE')) { define('BASE', '/'); }
 		set_include_path(BASE);
 
@@ -151,27 +181,12 @@ class Constructor {
 	* @return void
 	*/
 	private function init() {
-
-		/* Charge les fonctions et la config obligatoire */
-		$this->setFunctions();
-		$this->checkConfig();
-
-		/* Détermine la page demandée */
-		$page = $this->whichPage();
-		$this->setPage($page);
-
-		/* Enregistre le template par défaut */
-		if (isset(PAGES[$page]['templates'])) { $this->setTemplate(PAGES[$page]['templates']); }
-		
-		/* Execute les actions de la page */
-		$this->doAction();
-		
-		/* Charge les templates enregistrés */
-		$html = $this->loadTemplate();
-		
-		/* Envoie la réponse */
-		$this->sendRequest($html);
-		
+		$this->setConfig();        /* Charge les fonctions et la config obligatoire */
+		$this->whichPage();        /* Détermine la page demandée */
+		$this->defaultTemplate();  /* Enregistre le template par défaut */
+		$this->doAction();         /* Execute les actions de la page */
+		$this->loadTemplate();     /* Charge les templates enregistrés */
+		$this->sendRequest($html); /* Envoie la réponse */
 	}
 
 	/**
@@ -193,6 +208,18 @@ class Constructor {
 			if (!$alt_page) { throw new Exception('Cette page n\'existe pas', 210); /* Si l'alternative n'existe pas : 404 */ }
 			else { redirect($alt_full_url, 301); /* Si l'alternative existe : redirection */ }
 		}
+		$this->setPage($page);
+	}
+
+	/**
+	* Méthode qui paramètre le template par défaut
+	*
+	*
+	* @param void
+	* @return le code de la page
+	*/
+	public static function defaultTemplate() {
+		if (isset(PAGES[$this->getPage()]['templates'])) { $this->setTemplate(PAGES[$this->getPage()]['templates']); }
 	}
 
 	/**
@@ -306,6 +333,21 @@ class Constructor {
 			$this->templates = $templates;
 		} else {
 			throw new Exception('Un ou plusieurs templates n\'existe pas', 142);	
+		}
+	}
+
+	/**
+	* Méthode qui fixe le code HTTP
+	*
+	*
+	* @param string code
+	* @return void
+	*/
+	public function setCode($code) {
+		if (in_array($code, CODE_HTTP)) {
+			$this->code = $code;
+		} else {
+			throw new Exception('Le code HTTP n\'existe pas', 181);	
 		}
 	}
 
