@@ -93,6 +93,7 @@ class Constructor {
 	private function __construct() {
 		error_reporting(E_ERROR | E_CORE_ERROR);
 		if (!defined('MASTER')) { define('MASTER', true); }
+		spl_autoload_register('setClass');
 
 		try {
 			$this->setErrors();
@@ -147,6 +148,16 @@ class Constructor {
 	* @return void
 	*/
 	private function setFunctions() { if (!@include_once('./core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); } }
+
+	/**
+	* Charge la classe
+	*
+	* @param string nom de la classe
+	* @return void
+	*/
+	private function setClass($class) {
+		if (!@include_once('./modele/'.strtolower($class).'.class.php')) { throw new Exception('Fichier de classe manquant : classe '.$class, 131); }
+	}
 
 	/**
 	* Charge la config et et le niveau d'erreur
