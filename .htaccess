@@ -3,6 +3,11 @@
 RewriteEngine On
 RewriteBase /PERSO/MAIL/
 
+RewriteCond %{REQUEST_FILENAME} ^\/assets\/
+RewriteRule .* truc.php [L]
+
+
+RewriteCond %{REQUEST_FILENAME} !^assets\/
 RewriteRule .* main.php [L]
 
 </IfModule>

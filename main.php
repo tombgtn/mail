@@ -80,7 +80,7 @@ class Constructor {
 	* @return Singleton
 	*/
 	public static function getInstance() {
-		if(is_null(self::$_instance)) { self::$_instance = new Constructor(); }
+		if(!isset(self::$_instance)) { self::$_instance = new Constructor(); }
 		return self::$_instance;
 	}
 
@@ -93,7 +93,7 @@ class Constructor {
 	private function __construct() {
 		error_reporting(E_ERROR | E_CORE_ERROR);
 		if (!defined('MASTER')) { define('MASTER', true); }
-		spl_autoload_register('setClass');
+		spl_autoload_register('Constructor::setClass');
 
 		try {
 			$this->setErrors();
@@ -172,7 +172,7 @@ class Constructor {
 	* @param string nom de la classe
 	* @return void
 	*/
-	private function setClass($class) {
+	public static function setClass($class) {
 		if (!@include_once('./modele/'.strtolower($class).'.class.php')) { throw new Exception('Fichier de classe manquant : classe '.$class, 131); }
 	}
 
@@ -319,10 +319,9 @@ class Constructor {
 	* @return string code html du template
 	*/
 	private function sendRequest() {
-
-		
+		$header = $_SERVER['SERVER_PROTOCOL'];		
 		//header('');
-		echo getHtml();
+		echo $this->getHtml();
 	}
 
 
@@ -342,7 +341,7 @@ class Constructor {
 	* @return string page
 	*/
 	public static function getPage() {
-		return $this->page;
+		return self::$page;
 	}
 
 	/**
@@ -353,7 +352,7 @@ class Constructor {
 	* @return array templates
 	*/
 	public static function getTemplate() {
-		return $this->templates;
+		return self::$templates;
 	}
 
 	/**
@@ -364,7 +363,7 @@ class Constructor {
 	* @return string code
 	*/
 	public static function getCode() {
-		return $this->code;
+		return self::$code;
 	}
 
 	/**
@@ -375,7 +374,7 @@ class Constructor {
 	* @return string/array data
 	*/
 	public static function getData() {
-		return $this->data;
+		return self::$data;
 	}
 
 	/**
@@ -386,7 +385,7 @@ class Constructor {
 	* @return string html
 	*/
 	public static function getHtml() {
-		return $this->html;
+		return self::$html;
 	}
 
 
@@ -405,7 +404,7 @@ class Constructor {
 	* @return void
 	*/
 	public function setPage($page) {
-		$this->page = $page;
+		self::$page = $page;
 	}
 
 	/**
@@ -418,7 +417,7 @@ class Constructor {
 	public function setTemplate($templates) {
 		if (template_exist($templates)) {
 			if (is_string($templates)) { $templates = array($templates); }
-			$this->templates = $templates;
+			self::$templates = $templates;
 		} else {
 			throw new Exception('Un ou plusieurs templates n\'existe pas', 142);	
 		}
@@ -433,7 +432,7 @@ class Constructor {
 	*/
 	public function setCode($code) {
 		if (in_array($code, CODE_HTTP)) {
-			$this->code = $code;
+			self::$code = $code;
 		} else {
 			throw new Exception('Le code HTTP n\'existe pas', 181);	
 		}
@@ -447,7 +446,7 @@ class Constructor {
 	* @return void
 	*/
 	public function setData($data=null) {
-		$this->data = $data;
+		self::$data = $data;
 	}
 
 	/**
@@ -458,7 +457,7 @@ class Constructor {
 	* @return void
 	*/
 	public function setHtml($html='') {
-		$this->html .= $html;
+		self::$html .= $html;
 	}
 
 }
