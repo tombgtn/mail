@@ -133,6 +133,15 @@ class Constructor {
 		$this->sendRequest();      /* Envoie la réponse */
 	}
 
+
+
+
+
+
+
+
+	/********** CORE **********/
+
 	/**
 	* Charge la page des erreurs (errors.php)
 	*
@@ -206,7 +215,7 @@ class Constructor {
 	* @param void
 	* @return le code de la page
 	*/
-	public static function whichPage() {
+	private function whichPage() {
 		$full_url = $_SERVER['REQUEST_URI'];
 		$url = str_replace(BASE, '/', $full_url);
 		$page = array_search_key(PAGES, 'url', $url);
@@ -228,7 +237,7 @@ class Constructor {
 	* @param void
 	* @return le code de la page
 	*/
-	public static function defaultTemplate() {
+	private function defaultTemplate() {
 		if (isset(PAGES[$this->getPage()]['templates'])) { $this->setTemplate(PAGES[$this->getPage()]['templates']); }
 	}
 
@@ -239,7 +248,7 @@ class Constructor {
 	* @param void
 	* @return resultat de l'action
 	*/
-	public static function doAction() {
+	private function doAction() {
 		if (isset(PAGES[$page]['action'])) {
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
 				//PAGES[$page]['action']();
@@ -259,7 +268,7 @@ class Constructor {
 	* @param void
 	* @return string code html du template
 	*/
-	public static function loadTemplate() {
+	private function loadTemplate() {
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
 		if (isset($this->getTemplate())) {
 			
@@ -275,8 +284,9 @@ class Constructor {
 	* @param void
 	* @return string code html du template
 	*/
-	public static function sendRequest($html, $code) {
-		
+	private function sendRequest() {
+		//header('');
+		echo getHtml();
 	}
 
 
@@ -304,12 +314,44 @@ class Constructor {
 	*
 	*
 	* @param void
-	* @return string page
+	* @return array templates
 	*/
 	public static function getTemplate() {
 		return $this->templates;
 	}
 
+	/**
+	* Méthode qui récupère le code HTTP
+	*
+	*
+	* @param void
+	* @return string code
+	*/
+	public static function getCode() {
+		return $this->code;
+	}
+
+	/**
+	* Méthode qui récupère les data
+	*
+	*
+	* @param void
+	* @return string/array data
+	*/
+	public static function getData() {
+		return $this->data;
+	}
+
+	/**
+	* Méthode qui récupère le HTML
+	*
+	*
+	* @param void
+	* @return string html
+	*/
+	public static function getHtml() {
+		return $this->html;
+	}
 
 
 
@@ -359,6 +401,28 @@ class Constructor {
 		} else {
 			throw new Exception('Le code HTTP n\'existe pas', 181);	
 		}
+	}
+
+	/**
+	* Méthode qui fixe les data
+	*
+	*
+	* @param string/array data
+	* @return void
+	*/
+	public function setData($data=null) {
+		$this->data = $data;
+	}
+
+	/**
+	* Méthode qui fixe le HTML
+	*
+	*
+	* @param string html
+	* @return void
+	*/
+	public function setHtml($html='') {
+		$this->html = $html;
 	}
 
 }
