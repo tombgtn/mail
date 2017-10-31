@@ -254,9 +254,7 @@ class Constructor {
 			$data = null;
 			
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
-				/**
-				* Execution de la fonction PAGES[$page]['action']();
-				**/
+				$data = PAGES[$page]['action']();
 			} else if (is_array(PAGES[$page]['action'])) {
 				/**
 				* Chargement du modele
@@ -279,15 +277,29 @@ class Constructor {
 	*/
 	private function loadTemplate() {
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
-		if (isset($this->getTemplate())) {
+		$templates = $this->getTemplate();
+		if (isset($templates)) {
 			ob_start();
-			/**
-			* Execution du template
-			**/
+			foreach ($templates as $template) { $this->includeTemplate($template); }
 			$html = ob_get_clean();
 			$this->setHtml($html);
 		} else {
 			throw new Exception('Aucun template(s) définie(-nt)', 141);
+		}
+	}
+
+	/**
+	* Méthode qui fixe le template
+	*
+	*
+	* @param string template
+	* @return void
+	*/
+	public function includeTemplate($template) {
+		if (template_exist($template)) {
+			if (!@include('./template/'.strtolower($template).'.php')) { throw new Exception('Fichier de template non chargé', 143); }
+		} else {
+			throw new Exception('Le template '.$template.' n\'existe pas', 142);	
 		}
 	}
 
