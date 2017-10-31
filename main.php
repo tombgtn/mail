@@ -43,7 +43,7 @@ class Constructor {
 	* @access private
 	* @static
 	*/
-	private static $code = null;
+	private static $code = 200;
 
 	/**
 	* Data générée par les actions
@@ -157,6 +157,14 @@ class Constructor {
 	* @return void
 	*/
 	private function setFunctions() { if (!@include_once('./app/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); } }
+
+	/**
+	* Charge la page des codes HTTP (http.php)
+	*
+	* @param void
+	* @return void
+	*/
+	private function setHttp() { if (!@include_once('./app/http.php')) { throw new Exception('Fichier des codes HTTP manquant', 131); } }
 
 	/**
 	* Charge la classe
@@ -311,6 +319,7 @@ class Constructor {
 	* @return string code html du template
 	*/
 	private function sendRequest() {
+
 		
 		//header('');
 		echo getHtml();
