@@ -1,6 +1,6 @@
 <?php
 
-$errors = array(
+define('ERRORS', array(
 
 	
 	'1' => array(
@@ -241,4 +241,62 @@ $errors = array(
 	)
 
 
-);
+));
+
+
+
+
+/*
+
+
+200 : Erreur client
+
+210 : Page non trouvé
+211 : Accès non autorisé
+212 : Connection obligatoire
+213 : Paramètres manquants
+214 : Requête trop longue
+215 : Pourquoi se connecter à une théière ?
+
+220 : Erreur formulaire
+221 : Champ obligatoire non remplie
+222 : Case obligatoire non cochée
+223 : Mauvais format
+224 : Valeure interdite
+
+230 : Texte incorrect
+231 : Texte interdit
+232 : Texte non identique
+233 : Texte déjà utilisé
+234 : Texte trop long
+235 : Texte trop court
+236 : Nombre incorrect
+237 : Nombre interdit
+238 : Nombre non identique
+239 : Nombre déjà utilisé
+240 : Nombre trop grand
+241 : Nombre trop petit
+242 : Mail incorrect
+243 : Mail interdit
+244 : Mail non identique
+245 : Mail déjà utilisé
+246 : Mail trop long
+247 : Mail trop court
+248 : Nom de domaine interdit
+249 : Telephone incorrect
+250 : Telephone interdit
+251 : Telephone non identique
+252 : Telephone déjà utilisé
+253 : Telephone trop long
+254 : Telephone trop court
+255 : Date incorrect
+256 : Date interdit
+257 : Date non identique
+258 : Date déjà utilisé
+259 : Date trop ancienne
+260 : Date trop récente
+261 : Date trop future
+262 : Captcha incorrect
+
+*/
+

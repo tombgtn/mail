@@ -148,7 +148,7 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setErrors() { if (!include_once('./core/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); } $this->setDebug(); }
+	private function setErrors() { if (!include_once('./app/errors.php')) { throw new Exception('Fichier d\'erreur manquant', 131); } $this->setDebug(); }
 
 	/**
 	* Charge la page des fonctions primaires (functions.php)
@@ -156,7 +156,7 @@ class Constructor {
 	* @param void
 	* @return void
 	*/
-	private function setFunctions() { if (!@include_once('./core/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); } }
+	private function setFunctions() { if (!@include_once('./app/functions.php')) { throw new Exception('Fichier de fonctions manquant', 131); } }
 
 	/**
 	* Charge la classe
@@ -258,7 +258,7 @@ class Constructor {
 			} else if (is_array(PAGES[$page]['action'])) {
 				/**
 				* Chargement du modele
-				* Execution de la fonction model::function();
+				* Execution de la fonction modele::function();
 				**/
 			}
 
@@ -289,15 +289,15 @@ class Constructor {
 	}
 
 	/**
-	* Méthode qui fixe le template
+	* Méthode qui inclut le template
 	*
 	*
 	* @param string template
 	* @return void
 	*/
-	public function includeTemplate($template) {
+	private function includeTemplate($template) {
 		if (template_exist($template)) {
-			if (!@include('./template/'.strtolower($template).'.php')) { throw new Exception('Fichier de template non chargé', 143); }
+			if (!@include('./templates/'.strtolower($template).'.php')) { throw new Exception('Fichier de template non chargé', 143); }
 		} else {
 			throw new Exception('Le template '.$template.' n\'existe pas', 142);	
 		}
@@ -311,6 +311,7 @@ class Constructor {
 	* @return string code html du template
 	*/
 	private function sendRequest() {
+		
 		//header('');
 		echo getHtml();
 	}
