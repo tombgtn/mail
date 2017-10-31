@@ -250,14 +250,23 @@ class Constructor {
 	*/
 	private function doAction() {
 		if (isset(PAGES[$page]['action'])) {
+			ob_start();
+			$data = null;
+			
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
-				//PAGES[$page]['action']();
+				/**
+				* Execution de la fonction PAGES[$page]['action']();
+				**/
 			} else if (is_array(PAGES[$page]['action'])) {
-				/*
-				load model
-				execute model::fucntion
-				*/
+				/**
+				* Chargement du modele
+				* Execution de la fonction model::function();
+				**/
 			}
+
+			$html = ob_get_clean();
+			$this->setHtml($html);
+			$this->setData($data);
 		}
 	}
 
@@ -271,7 +280,12 @@ class Constructor {
 	private function loadTemplate() {
 		/* Les templates ($this->templates) ont pu être modifiés durant l'action (ex: login erreur/succes) */
 		if (isset($this->getTemplate())) {
-			
+			ob_start();
+			/**
+			* Execution du template
+			**/
+			$html = ob_get_clean();
+			$this->setHtml($html);
 		} else {
 			throw new Exception('Aucun template(s) définie(-nt)', 141);
 		}
@@ -422,7 +436,7 @@ class Constructor {
 	* @return void
 	*/
 	public function setHtml($html='') {
-		$this->html = $html;
+		$this->html .= $html;
 	}
 
 }
