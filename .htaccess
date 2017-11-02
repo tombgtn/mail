@@ -6,8 +6,7 @@ RewriteEngine On
 RewriteBase /PERSO/MAIL/
 RewriteRule ^main\.php$ - [L]
 
-RewriteCond /templates%{REQUEST_URI} !-f
-RewriteCond /templates%{REQUEST_URI} !-d
+RewriteCond %{DOCUMENT_ROOT}/templates%{REQUEST_URI} !-f
 RewriteRule . main.php [L]
 
 </IfModule>
