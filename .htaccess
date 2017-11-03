@@ -1,31 +1,14 @@
-<IfModule mod_rewrite.c>
 
 Options +FollowSymLinks
 Options -Indexes
+
+<IfModule mod_rewrite.c>
+
 RewriteEngine On
 RewriteBase /PERSO/MAIL/
-
-# Si on demande main.php, l'affiche (utile lors du deuxieme passage au htaccess en cas de page)
-#RewriteRule ^main\.php$ - [L]
-
-# Si le fichier existe et qu'il est dans le dossier templates, l'affiche (utile lors du deuxieme passage au htaccess en cas de fichier)
-#RewriteCond %{REQUEST_FILENAME} -f
-#RewriteRule ^\/templates\/.* - [L]
-
-# Si le fichier existe dans templates, redirect vers le fichier dans templates
-#RewriteCond %{DOCUMENT_ROOT}/templates/%{REQUEST_URI} -f
-#RewriteRule  ^(.*)$  /templates/$1  [L]
-
-#RewriteRule . main.php [L]
-
-
-
-
-
-RewriteCond  %{DOCUMENT_ROOT}/templates/$1 -f
-RewriteRule  ^(.*)$  /templates/$1  [L,QSA]
-
-# If we've gotten here, route to dynamic controller
-RewriteRule ^(.*)$ main.php [L,QSA]
+RewriteRule ^main\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . main.php [L]
 
 </IfModule>
+
