@@ -321,7 +321,7 @@ class Constructor {
 	private function sendRequest() {
 		$header = $_SERVER['SERVER_PROTOCOL'];
 		header('HTTP/2.0 200 OK');
-		header('Strict-Transport-Security: max-age=500; includeSubDomains; preload');
+		header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 
 		var_dump(headers_list());
 		//echo $this->getHtml();

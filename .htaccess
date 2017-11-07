@@ -21,7 +21,13 @@ ErrorDocument 500 app/error.php?500
 	
 	## HTTPS
 	RewriteCond %{HTTPS} off
-	RewriteRule . https://%{HTTP_HOST}%{REQUEST_URI} 
+	RewriteRule . https://%{HTTP_HOST}%{REQUEST_URI}
+
+	## robots.txt
+	RewriteRule ^robots\.txt$ app/robots.txt [L]
+
+	## humans.txt
+	RewriteRule ^humans\.txt$ app/humans.txt [L]
 	
 	## main.php
 	RewriteRule ^main\.php$ - [L]
