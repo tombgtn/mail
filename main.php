@@ -319,9 +319,13 @@ class Constructor {
 	* @return string code html du template
 	*/
 	private function sendRequest() {
-		$header = $_SERVER['SERVER_PROTOCOL'];		
-		//header('');
-		echo $this->getHtml();
+		$header = $_SERVER['SERVER_PROTOCOL'];
+		header('HTTP/2.0 200 OK');
+		header('Strict-Transport-Security: max-age=500; includeSubDomains; preload');
+
+		var_dump(headers_list());
+		//echo $this->getHtml();
+		exit;
 	}
 
 
