@@ -195,6 +195,7 @@ class Constructor {
 	*/
 	private function setConfig() {
 		$this->setFunctions();
+		$this->setHttp();
 		
 		if (!defined('BASE')) { define('BASE', '/'); }
 		set_include_path(BASE);
