@@ -1,6 +1,6 @@
 <?php
 
-class Constructor {
+class Controller {
 
 
 
@@ -9,9 +9,9 @@ class Constructor {
 	/********** ATTRIBUTS **********/
 	
 	/**
-	* Instance de la class Constructor
+	* Instance de la class Controller
 	* 
-	* @var Constructor
+	* @var Controller
 	* @access private
 	* @static
 	*/
@@ -80,7 +80,7 @@ class Constructor {
 	* @return Singleton
 	*/
 	public static function getInstance() {
-		if(!isset(self::$_instance)) { self::$_instance = new Constructor(); }
+		if(!isset(self::$_instance)) { self::$_instance = new Controller(); }
 		return self::$_instance;
 	}
 
@@ -93,7 +93,7 @@ class Constructor {
 	private function __construct() {
 		error_reporting(E_ERROR | E_CORE_ERROR);
 		if (!defined('MASTER')) { define('MASTER', true); }
-		spl_autoload_register('Constructor::setClass');
+		spl_autoload_register('Controller::setClass');
 
 		try {
 			$this->setErrors();
@@ -466,4 +466,4 @@ class Constructor {
 	}
 
 }
-$main = Constructor::getInstance();
+$main = Controller::getInstance();

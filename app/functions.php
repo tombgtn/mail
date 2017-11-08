@@ -1,4 +1,5 @@
 <?php
+if (!defined('MASTER')) { die('You shall not pass !'); }
 
 function hash_password($str, $salt=null) {
 	if (!isset($salt)||!is_int($salt)||$salt>9||$salt<1||in_array($salt, array(1,2,3,4,5,6,7,8,9))) { $salt = random_int(1,9); }

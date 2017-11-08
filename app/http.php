@@ -1,6 +1,7 @@
 <?php
+if (!defined('MASTER')) { die('You shall not pass !'); }
 
-define('ERRORS', array(
+define('HTTP', array(
 	100 => '100 Continue',
 	101 => '101 Switching Protocols',
 	102 => '102 Processing',
