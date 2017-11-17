@@ -323,6 +323,7 @@ class Controller {
 		$header = $_SERVER['SERVER_PROTOCOL'];
 		header('HTTP/2.0 200 OK');
 		header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
+		header_remove("X-Powered-By");
 
 		var_dump(headers_list());
 		//echo $this->getHtml();
