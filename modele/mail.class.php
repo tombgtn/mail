@@ -3,7 +3,15 @@
 if (!defined('MASTER')) { die('You shall not pass mail !'); }
 
 
-class Mail {
+class Mail extends ModeleClass {
+
+	/**
+	* Expéditeur du mail
+	*
+	* @var string
+	* @access private
+	*/ 
+	private const _REQUIRE = array();
 
 	/**
 	* Expéditeur du mail

@@ -262,6 +262,7 @@ class Controller {
 			ob_start();
 			$data = null;
 			
+			ini_set('disable_functions', 'include, include_once, require, require_once');
 			if (is_string(PAGES[$page]['action'])&&function_exists(PAGES[$page]['action'])) {
 				$data = PAGES[$page]['action']();
 			} else if (is_array(PAGES[$page]['action'])) {

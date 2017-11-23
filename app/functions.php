@@ -36,3 +36,7 @@ function template_exist($template) {
 	}
 	return false;
 }
+
+function sanitize_var($var) {
+	return $var;
+}
