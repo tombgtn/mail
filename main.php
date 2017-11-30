@@ -50,7 +50,7 @@ $front = new Front();*/
 
 abstract class _MODULE {
 
-	private $_LINKSTO = array();        // Liste des modules avec qui il peut communiquer
+/*	private $_LINKSTO = array();        // Liste des modules avec qui il peut communiquer
 	private $_IN = array();             // Type des variables pouvant être entrés dans ce module
 	private $_OUT = array();            // Type des variables pouvant être sortis de ce module (string, int, object, array, object from class, all)
 
@@ -72,26 +72,28 @@ abstract class _MODULE {
 			return call_user_func_array(array($this, $method), $parameters);
 		}
 		return false;
-	}
+	}*/
 
 }
 
-spl_autoload_register(function($class) {
-	if (is_subclass_of($class, '_MODULE', true)) {
-		# code...
-	} else {
-		throw new Exception("Error Processing Request", 1);
-	}	
-});
 
 
+//linksto Controller
 
-
-
-class Front extends _MODULE linksto Controller
-{	
+class Front extends _MODULE
+{
 	function __construct() {}
 }
 
+
+function __autoloader($class) {
+	if (is_subclass_of($class, '_MODULE', true)) {
+		echo $class." is a subclass of __MODULE";
+	} else {
+		echo $class." is not a subclass of __MODULE";
+	}	
+}
+
+spl_autoload_register('__autoloader');
 
 $front = new Front();
