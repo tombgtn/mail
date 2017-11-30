@@ -1,6 +1,6 @@
 <?php
 
-class __MODULE {
+abstract class __MODULE {
 
 	private static $_MODULES = array(); // Liste des modules créés
 	private static $_LOADED = array();  // Liste des modules déjà chargés
@@ -27,17 +27,17 @@ class __MODULE {
 		return false;
 	}
 
-	protected final function __get($property) {
+	public final function __get($property) {
 		// Lors d'un appel du type $controller->variable [OUT, DEPENDENCIES]
 		return false;
 	}
 
-	protected final function __set($property, $value) {
+	public final function __set($property, $value) {
 		// Lors d'un appel du type $controller->variable='test' [IN, DEPENDENCIES]
 		return false;
 	}
 
-	protected final function __call($method, $parameters) {
+	public final function __call($method, $parameters) {
 		var_dump($parameters);
 		return false;
 		if (in_array($parameters[0], $this->_RESTRICT)) {
