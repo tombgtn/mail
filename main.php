@@ -63,16 +63,18 @@ abstract class _MODULE {
 		// Lors d'un appel du type $controller->variable='test' [IN, DEPENDENCIES]
 		return false;
 	}
-
-	public final function __call($method, $parameters) {
-		var_dump($parameters);
-		return false;
 		if (in_array($parameters[0], $this->_RESTRICT)) {
 			array_shift($parameters);
 			return call_user_func_array(array($this, $method), $parameters);
 		}
 		return false;
-	}*/
+*/
+	public final function __call($method, $parameters) {
+		var_dump(self::_LINKSTO);
+		var_dump($method);
+		var_dump($parameters);
+		return false;
+	}
 
 }
 
@@ -82,18 +84,17 @@ abstract class _MODULE {
 
 class Front extends _MODULE
 {
-	function __construct() {}
+	define('_LINKSTO', array('Controller','_SCRIPT'));
+
+	function test() {
+		echo "hello world";
+	}
+
+	public static function init() {
+		// Protection des variables
+		// Initialisation de la session
+	}
 }
-
-
-function __autoloader($class) {
-	if (is_subclass_of($class, '_MODULE', true)) {
-		echo $class." is a subclass of __MODULE";
-	} else {
-		echo $class." is not a subclass of __MODULE";
-	}	
-}
-
-spl_autoload_register('__autoloader');
 
 $front = new Front();
+$front->test();
