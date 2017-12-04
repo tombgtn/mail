@@ -1,0 +1,46 @@
+/app
+   /robots.txt
+   /human.txt
+   /module.php
+   /models.module.php
+   /views.module.php
+   /bdd.module.php
+   /controller.module.php
+   /helpers.module.php
+/models
+   /user.class.php
+   /mails.class.php
+   ...
+/views
+   /login.tpl
+   /mails.tpl
+   ...
+/helpers
+   /http.class.php
+   /errors.class.php
+   ...
+/assets
+   /js
+   /img
+   /css
+/.config
+/.htaccess
+/main.php
+
+
+
+/* Programme */
+
+.htaccess
+   main.php
+      .config
+      app/module.php
+      app/helpers.module.php
+         helpers/http.class.php
+         ...
+      app/controller.module.php
+         app/models.module.php
+            app/bdd.module.php
+            models/xxx.class.php
+         app/views.module.php
+            views/xxx.tpl
