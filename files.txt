@@ -1,28 +1,29 @@
 /app
-   /robots.txt
-   /human.txt
-   /module.php
-   /models.module.php
-   /views.module.php
-   /bdd.module.php
-   /controller.module.php
-   /helpers.module.php
+	/module.php
+	/models.module.php
+	/views.module.php
+	/bdd.module.php
+	/controller.module.php
+	/helpers.module.php
+/public
+	/robots.txt
+	/humans.txt
 /models
-   /user.class.php
-   /mails.class.php
-   ...
+	/user.class.php
+	/mails.class.php
+	...
 /views
-   /login.tpl
-   /mails.tpl
-   ...
+	/login.tpl
+	/mails.tpl
+	...
 /helpers
-   /http.class.php
-   /errors.class.php
-   ...
+	/http.class.php
+	/errors.class.php
+	...
 /assets
-   /js
-   /img
-   /css
+	/js
+	/img
+	/css
 /.config
 /.htaccess
 /main.php
@@ -32,15 +33,53 @@
 /* Programme */
 
 .htaccess
-   main.php
-      .config
-      app/module.php
-      app/helpers.module.php
-         helpers/http.class.php
-         ...
-      app/controller.module.php
-         app/models.module.php
-            app/bdd.module.php
-            models/xxx.class.php
-         app/views.module.php
-            views/xxx.tpl
+	main.php
+		.config
+		app/module.php
+		app/helpers.module.php
+			helpers/http.class.php
+			...
+		app/controller.module.php
+			app/models.module.php
+				app/bdd.module.php
+				models/xxx.class.php
+			app/views.module.php
+				views/xxx.tpl
+
+
+
+
+
+
+
+
+
+
+
+
+
+app                     /** Dossier de l'app         **/ PRIVATE
+cache                  /** Dossier de cache         **/ PRIVATE
+dev                   /** Dossier de développement **/ PRIVATE
+	assets           /** Assets (css, js, img...) **/ PRIVATE
+	models          /** Modèles                  **/ PRIVATE
+	views          /** Vues                     **/ PRIVATE
+	controllers   /** Controlleurs             **/ PRIVATE
+log              /** Dossier des logs         **/ PRIVATE
+public          /** Dossier public           **/ PUBLIC
+upload         /** Dossier d'upload         **/ PUBLIC
+.htaccess     /** Htaccess                 **/ PRIVATE
+
+
+
+URLs :
+truc.com/public/robots.txt            -> truc.com/public/robots.txt
+truc.com/robots.txt                   -> truc.com/public/robots.txt [SPECIFIC]
+truc.com/humans.txt                   -> truc.com/public/humans.txt [SPECIFIC]
+truc.com/public/img/profil.jpg        -> truc.com/public/img/profil.jpg
+truc.com/plouf                        -> truc.com/app/main.php?p=plouf
+truc.com/dev/models/auth.php          -> truc.com/app/main.php?p=dev/models/auth.php
+truc.com/log/errors.log               -> truc.com/app/main.php?p=log/errors.log
+truc.com/dev/assets/js/script.js      -> truc.com/app/main.php?p=dev/assets/js/script.js
+truc.com/dev/.config                  -> truc.com/app/main.php?p=dev/.config
+truc.com/test.txt                     -> truc.com/app/main.php?p=test.txt
