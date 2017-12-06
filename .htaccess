@@ -204,18 +204,17 @@ ErrorDocument 500 app/error.php?500
 	RewriteCond %{HTTPS} off
 	RewriteRule . https://%{HTTP_HOST}%{REQUEST_URI}
 
-	# robots.txt
+	# robots.txt et humans.txt
 	RewriteRule ^robots\.txt$ public/robots.txt [L]
-
-	# humans.txt
 	RewriteRule ^humans\.txt$ public/humans.txt [L]
 	
 	# main.php
 	RewriteRule ^app/main\.php$ - [L]
 	
 	# general
+	# si fichier existe pas dans public ou upload
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule . main.php [L]
+	RewriteRule . app/main.php [L]
 </IfModule>
 
 
