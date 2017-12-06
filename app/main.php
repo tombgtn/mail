@@ -10,3 +10,4 @@
 // Appel du controller
 
 // Affichage de l'erreur ou du retour controleur
+echo 'hello monde';

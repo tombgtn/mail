@@ -214,7 +214,7 @@ ErrorDocument 500 app/error.php?500
 	# general
 	# si fichier existe pas dans public ou upload
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule . app/main.php [L]
+	RewriteRule ^.* app/main.php [L]
 </IfModule>
 
 
