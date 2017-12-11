@@ -83,3 +83,16 @@ truc.com/log/errors.log               -> truc.com/app/main.php?p=log/errors.log
 truc.com/dev/assets/js/script.js      -> truc.com/app/main.php?p=dev/assets/js/script.js
 truc.com/dev/.config                  -> truc.com/app/main.php?p=dev/.config
 truc.com/test.txt                     -> truc.com/app/main.php?p=test.txt
+
+
+
+
+
+Proxy reverse
+BananaPi
+FreeBSD
+lighttpd
+
+Server
+BananaPi
+OpenBSD
